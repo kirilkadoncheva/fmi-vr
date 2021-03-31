@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+
+		<meta charset="utf-8">
+		
+		<script src="three.min.js"></script>
+		<script src="stats.min.js"></script>
+		<script src="WebGL.js"></script>
+		<script src="vax.js"></script>
+	</head>
+	
+	<body>
+		<script>
+			// инциализираме моно режим през нашата библиотека
+			vaxInit();
+
+			var material = new THREE.MeshLambertMaterial();
+			var geometry = new THREE.BoxGeometry( 10, 10, 10 );
+
+			var figure = new THREE.Group();
+			var plateA = new THREE.Mesh( new THREE.BoxGeometry( 30, 20, 2 ), material );
+			var plateB = new THREE.Mesh( new THREE.BoxGeometry( 20, 30, 2 ), material );
+
+            var cylinder1 = new THREE.Mesh( new THREE.CylinderGeometry( 5, 5, 2, 80 ), material );
+            cylinder1.position.set(-10,10,0);
+            cylinder1.rotation.set(Math.PI/2, 0, 0);
+
+            var cylinder2 = new THREE.Mesh( new THREE.CylinderGeometry( 5, 5, 2, 80 ), material );
+            cylinder2.position.set(10,10,0);
+            cylinder2.rotation.set(Math.PI/2, 0, 0);
+
+            var cylinder3 = new THREE.Mesh( new THREE.CylinderGeometry( 5, 5, 2, 80 ), material );
+            cylinder3.position.set(10,-10,0);
+            cylinder3.rotation.set(Math.PI/2, 0, 0);
+
+            var cylinder4 = new THREE.Mesh( new THREE.CylinderGeometry( 5, 5, 2, 80 ), material );
+            cylinder4.position.set(-10,-10,0);
+            cylinder4.rotation.set(Math.PI/2, 0, 0);
+
+			scene.add( figure );			
+			figure.add(plateA);
+			figure.add(plateB);
+            figure.add(cylinder1);
+            figure.add(cylinder2);
+            figure.add(cylinder3);
+            figure.add(cylinder4);
+
+
+			function animate()
+			{
+				figure.rotation.set( t/3, t/4, t/5 );
+			}
+
+		</script>
+	</body>
+</html>
+

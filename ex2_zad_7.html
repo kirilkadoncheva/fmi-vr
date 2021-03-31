@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+
+		<meta charset="utf-8">
+		
+		<script src="three.min.js"></script>
+		<script src="stats.min.js"></script>
+		<script src="WebGL.js"></script>
+		<script src="vax.js"></script>
+	</head>
+	
+	<body>
+		<script>
+			// инциализираме моно режим през нашата библиотека
+			vaxInit();
+
+			 var material = new THREE.MeshLambertMaterial();
+			 var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+
+			var panel = new THREE.Group();
+            var bottom = new THREE.Mesh(geometry, material);
+            bottom.scale.set(10,30 ,1);
+            panel.add(bottom);
+
+            var square = new THREE.Mesh(geometry, material);
+            square.scale.set(5*Math.sqrt(2), 5*Math.sqrt(2), 1);
+            square.position.set(0,15,0);
+            square.rotation.set(0,0,Math.PI/4);
+            panel.add(square);
+
+            var fence_side = new THREE.Group();
+            for(var i=0; i<11; i++) {
+                var newPanel = panel.clone();
+                newPanel.position.set(11*(i-5),-20,0);
+                fence_side.add(newPanel);
+            }
+				
+            fence_side.position.set(0,0,0);
+            var line = new THREE.Mesh(geometry, material);
+            line.scale.set(120, 2, 1);
+            line.position.set(0,-10,-1);
+
+            var line2 = line.clone();
+            line2.position.set(0,-20,-1);
+
+            fence_side.add(line, line2);
+            fence_side.position.set(0,0,0);
+
+            var fence = new THREE.Group();
+            var fence_left = fence_side.clone();
+            fence_left.position.set(-60, 0, -60);
+            fence_left.rotation.set(0, -Math.PI/2, 0);
+
+            var fence_right = fence_side.clone();
+            fence_right.position.set(60, 0, -60);
+            fence_right.rotation.set(0, Math.PI/2, 0);
+
+            var fence_back = fence_side.clone();
+            fence_back.position.set(0, 0, -120);
+            fence_back.rotation.set(0, Math.PI, 0);
+
+            fence.add(fence_side);
+            fence.add(fence_left, fence_right, fence_back);
+
+            scene.add( fence );	
+			function animate()
+			{
+				fence.rotation.set( Math.PI*(Math.sin(0.6*t)-1)/2, t, 0, 'YXZ'  );
+			}
+
+		</script>
+	</body>
+</html>

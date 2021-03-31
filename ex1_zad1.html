@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<script src="three.min.js"></script>
+		<script src="WebGL.js"></script>
+		<script src="vax.js"></script>
+	</head>
+	
+	<body>
+		<script>
+			vaxInit();
+
+			var material = new THREE.MeshLambertMaterial();
+
+			var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+
+			var plateA = new THREE.Mesh( geometry, material );
+            scene.add(plateA);
+		</script>
+	</body>
+</html>

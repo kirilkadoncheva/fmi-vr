@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+
+		<meta charset="utf-8">
+		<script src="three.min.js"></script>
+		<script src="stats.min.js"></script>
+		<script src="WebGL.js"></script>
+		<script src="vax.js"></script>
+	</head>
+	
+	<body>
+		<script>
+			vaxInit();
+
+            var box_template_geometry = new THREE.BoxGeometry(1,1,1);
+            var blue_material = new THREE.MeshLambertMaterial({color:'#003da6'});
+            var white_material = new THREE.MeshLambertMaterial({color:'#ffffff'});
+            var black_material = new THREE.MeshLambertMaterial({color:'#000000'});
+            var light_blue_material = new THREE.MeshLambertMaterial({color:'#4787f5'});
+
+			var jelly = new THREE.Group();
+            var head = new THREE.Group();
+            var eye = new THREE.Group();
+            var body = new THREE.Group();
+
+            var head_base = new THREE.Mesh(box_template_geometry, blue_material);
+            head_base.scale.set(20,20,10);
+
+            var side_head_right_1 = new THREE.Mesh(box_template_geometry, blue_material);
+            side_head_right_1.scale.set(6,10,10);
+            side_head_right_1.position.set(13,-5,0);
+
+            var side_head_left_1 = side_head_right_1.clone();
+            side_head_left_1.position.set(-13,-5,0);
+
+            var side_head_right_2 = new THREE.Mesh(box_template_geometry, blue_material);
+            side_head_right_2.scale.set(6,5,10);
+            side_head_right_2.position.set(19,-7.5,0);
+
+            var side_head_left_2 = side_head_right_2.clone();
+            side_head_left_2.position.set(-19,-7.5,0);
+
+            var eye_base = new THREE.Mesh(box_template_geometry, white_material);
+            eye_base.scale.set(5,8,1);
+            eye_base.position.set(-5,3,5.5);
+
+            var pupil = new THREE.Mesh(box_template_geometry, black_material);
+            pupil.scale.set(3,5,1);
+            pupil.position.set(-5,1.5,6.5);
+
+            var smile = new THREE.Mesh(new THREE.TorusGeometry(3, 0.5, 30, 30, Math.PI), light_blue_material);
+            smile.position.set(0,-3,5.5);
+            smile.rotation.set(0,0,Math.PI);
+            eye.add(eye_base, pupil);
+
+            var right_eye = eye.clone();
+            right_eye.position.set(10,0,0);
+
+            var body_base = new THREE.Mesh(box_template_geometry, light_blue_material);
+            body_base.scale.set(44,2,10);
+            body_base.position.set(0,-12,0);
+
+            var pipalo_part_light = new THREE.Mesh(box_template_geometry, light_blue_material);
+            pipalo_part_light.scale.set(5,5,5);
+            pipalo_part_light.position.set(-20,-22.5,0);
+
+            var pipalo_part_dark = new THREE.Mesh(box_template_geometry, blue_material);
+            pipalo_part_dark.scale.set(5,5,5);
+            pipalo_part_dark.position.set(-20,-16.5,0);
+
+            var pipalo_part_dark_1 = pipalo_part_dark.clone();
+            pipalo_part_dark_1.position.set(-20,-28.5,0);
+
+            var pipalo_2_parts = new THREE.Group();
+            pipalo_2_parts.add(pipalo_part_light, pipalo_part_dark);
+
+            var pipalo_3_parts = pipalo_2_parts.clone();
+            pipalo_3_parts.add(pipalo_part_dark_1);
+            pipalo_2_parts.position.set(8,0,0);
+
+            var pipalo_5_parts = pipalo_3_parts.clone();
+
+            var pipalo_2_add = pipalo_2_parts.clone();
+            pipalo_2_add.position.set(0,-18,0);
+            pipalo_5_parts.add(pipalo_2_add);
+            pipalo_5_parts.position.set(16,0,0);
+
+            pipalo_3_parts_2 = pipalo_3_parts.clone();
+            pipalo_3_parts_2.position.set(24,0,0);
+
+            pipalo_2_parts_2 = pipalo_2_parts.clone();
+            pipalo_2_parts_2.position.set(32,0,0);
+            
+            pipalo_5_parts_2 = pipalo_5_parts.clone();
+            pipalo_5_parts_2.position.set(40,0,0);
+
+            body.add(pipalo_5_parts, pipalo_2_parts, pipalo_3_parts, pipalo_3_parts_2, pipalo_2_parts_2, pipalo_5_parts_2);
+            head.add(head_base, side_head_right_1, side_head_left_1, side_head_right_2, side_head_left_2, eye, right_eye, smile)
+            jelly.add(head, body_base, body);
+
+            var betsy = new THREE.Group();
+            betsy.add(jelly);
+
+            scene.add(betsy);
+            function animate()
+			{
+                var alpha = Math.sin(2*t)/4;
+                pipalo_3_parts.rotation.set( alpha, 0, 0, 'XYZ' );
+                pipalo_2_parts.rotation.set( -alpha, 0, 0, 'XYZ' );
+                pipalo_5_parts.rotation.set( alpha, 0, 0, 'XYZ' );
+                pipalo_3_parts_2.rotation.set( -alpha, 0, 0, 'XYZ' );
+                pipalo_2_parts_2.rotation.set( alpha, 0, 0, 'XYZ' );
+                pipalo_5_parts_2.rotation.set( -alpha, 0, 0, 'XYZ' );
+                jelly.rotation.set(0, 0, alpha/4, 'XYZ')
+				
+                //ако се махне ще се движи по-хубаво, ама за да трябва да се вижда отвсякъде
+                //betsy.rotation.set(0, t, 0, 'YXZ');
+			}
+
+		</script>
+	</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>E0412: Безкрайна анимация</title>
+		<meta charset="utf-8">
+		
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		
+		<script src="three.min.js"></script>
+		<script src="stats.min.js"></script>
+		<script src="WebGL.js"></script>
+		<script src="vax.js"></script>
+		<script src="scene.js"></script>
+		<script src="tween.umd.js"></script>
+	</head>
+	
+	<body>
+		<script>
+			sceneInit();
+			sceneObjects();
+
+            var pillars = [];
+            var positions = [];
+
+            for(var i = 0; i< 8; i++) {
+
+                var angle = 2*Math.PI*i/8;
+                
+                var p = new THREE.Vector3().setFromSphericalCoords(
+                    80,
+				    Math.PI/3,
+				    angle
+                );
+
+                var new_pillar =  pillar(p,ground.material);
+            
+                pillars.push(new_pillar);
+                positions.push(new_pillar.position);
+                console.info(new_pillar.position.y);
+                scene.add( new_pillar);
+            }
+
+            function f(t)
+			{
+			    var alpha = 2*Math.PI*t;
+			    var radius = 80;
+			    var p = new THREE.Vector3().setFromSphericalCoords(radius,Math.PI/3,alpha);
+				return p;
+			}
+			
+            object.position.copy(pillars[0]);
+            var curr = 0;
+            var next = 1;
+            var down = false;
+
+
+            function downPillar(i) {
+
+                var tweenDown = new TWEEN.Tween(pillars[i].scale).to({
+                    x: 1,
+                    y: 0.5,
+                    z: 1
+                    }, 100)
+                    //.onComplete(() => {positions[i] = pillars[i].position; })
+
+                var tweenUp = new TWEEN.Tween(pillars[i].scale).to({
+                    x: 1,
+                    y: 1,
+                    z: 1
+                    }, 700)
+                    //.onComplete(() => {positions[i] = pillars[i].position;})
+
+                tweenDown.chain(tweenUp);
+                tweenDown.start();
+            }
+
+            function upPillar(i) {
+
+                
+            }
+            
+            function getDownCoords (i) {
+                pillars[i].scale.set(1,0.5,1);
+
+                var coords = pillars[i].position;
+                return coords;
+
+            }
+
+			function animate()
+			{
+				TWEEN.update();
+                var dist = object.position.distanceTo(positions[next]);
+
+                for(var i = 0; i < 8; i++) {
+                    var dist = object.position.distanceTo(positions[i]);
+                    if(dist<50) {
+                        downPillar(i);
+                    }
+                }
+				object.position.copy(f(t/4)); 
+
+				object.rotation.y -= 0.1;
+				scene.rotation.y += 0.002;
+			}
+		</script>
+	</body>
+</html>
+

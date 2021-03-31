@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<script src="three.min.js"></script>
+		<script src="stats.min.js"></script>
+		<script src="WebGL.js"></script>
+		<script src="vax.js"></script>
+	</head>
+	
+	<body>
+		<script>
+			// инциализираме моно режим през нашата библиотека
+			vaxInit();
+
+            var cube_geometry = new THREE.BoxGeometry(7,7,7);
+
+            function buildTower() {
+                var height = THREE.Math.randInt(3, 10);
+
+                var x = THREE.Math.randFloat( -40, 40 );
+				var z = THREE.Math.randFloat( -40, 40 );
+				
+				var tower = new THREE.Group();
+				scene.add( tower );
+
+                for (var i=0; i<height; i++)
+				{
+					var material = new THREE.MeshPhongMaterial( {
+						color: new THREE.Color().setHSL( THREE.Math.randFloat(0,1), 1, 0.7 ),
+						shininess: 100,
+					} );
+					
+					var cube = new THREE.Mesh( cube_geometry, material );
+					cube.position.set( THREE.Math.randFloat(x-1, x+1), 7*i-30, THREE.Math.randFloat(z-1, z+1) );
+					cube.rotation.y = THREE.Math.randFloat( 0, 2*Math.PI );
+					tower.add( cube );
+				}
+            }
+
+            for(var i = 0; i< 10; i++) {
+                buildTower();
+            }
+            var platform = new THREE.Mesh(
+				new THREE.BoxGeometry( 100, 4, 100 ),
+				new THREE.MeshPhongMaterial( {color:'white', shininess:20} )
+			);
+			platform.position.y = -35.5;
+			scene.add( platform );
+			
+			// розов фон
+			scene.background = new THREE.Color( 'pink' );
+			
+			// допълнителна розова светлина, по-силна от нормалното,
+			// така осветява в розово гърбовете на кубчетата
+			scene.add( new THREE.AmbientLight( 'deeppink', 1.5 ) );
+			
+			function animate()
+			{
+				scene.rotation.set( 0, t, 0 );
+			}
+
+		</script>
+	</body>
+</html>

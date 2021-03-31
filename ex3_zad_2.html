@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<script src="three.min.js"></script>
+		<script src="stats.min.js"></script>
+		<script src="WebGL.js"></script>
+		<script src="vax.js"></script>
+	</head>
+	
+	<body>
+		<script>
+			// инциализираме моно режим през нашата библиотека
+			vaxInit();
+
+            var geometry = new THREE.CircleGeometry(20, 60);
+
+            var circle = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({color: 'midnightblue'}));
+            var figure = new THREE.Group();
+
+    
+            scene.add(figure);
+            figure.add(circle);
+
+            var colors = ['red', 'orange', 'yellow', 'lime', 'dodgerblue', 'blueviolet'] ;
+
+            for(var i=0; i<6;i++) {
+                var new_circle = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({color: colors[i]}));
+                var angle = 2*Math.PI*i/6;
+
+                new_circle.position.set(40*Math.sin(angle), 40*Math.cos(angle), 0);
+                figure.add(new_circle);
+            }
+            function animate()
+			{
+				figure.rotation.set( 0, 0, t );
+			}
+
+		</script>
+	</body>
+</html>

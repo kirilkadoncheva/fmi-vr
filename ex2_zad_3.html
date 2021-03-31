@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+
+		<meta charset="utf-8">
+		
+		<script src="three.min.js"></script>
+		<script src="stats.min.js"></script>
+		<script src="WebGL.js"></script>
+		<script src="vax.js"></script>
+	</head>
+	
+	<body>
+		<script>
+			// инциализираме моно режим през нашата библиотека
+			vaxInit();
+
+			 var material = new THREE.MeshLambertMaterial();
+			// var geometry = new THREE.BoxGeometry( 10, 10, 10 );
+
+			var figure = new THREE.Group();
+			var stick = new THREE.Mesh(new THREE.CylinderGeometry(1, 1, 60, 80), material);
+			stick.rotation.set(0,0,Math.PI/2);
+
+			var tip1 = new THREE.Mesh(new THREE.SphereGeometry(4, 20, 20), material);
+			tip1.position.set(-32,0,0);
+			tip1.scale.set(1,2,1);
+			tip1.rotation.set(0,0,Math.PI/2);
+
+			var tip2 = new THREE.Mesh(new THREE.SphereGeometry(4, 20, 20), material);
+			tip2.position.set(32,0,0);
+			tip2.scale.set(1,2,1);
+			tip2.rotation.set(0,0,Math.PI/2);
+
+
+			scene.add( figure );		
+            figure.add(stick);
+			figure.add(tip1);
+			figure.add(tip2);
+
+
+			function animate()
+			{
+				figure.rotation.set( t/3, t/4, t/5 );
+			}
+
+		</script>
+	</body>
+</html>
+

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+
+		<meta charset="utf-8">
+		
+		<script src="three.min.js"></script>
+		<script src="stats.min.js"></script>
+		<script src="WebGL.js"></script>
+		<script src="vax.js"></script>
+	</head>
+	
+	<body>
+		<script>
+			// инциализираме моно режим през нашата библиотека
+			vaxInit();
+
+			 var material = new THREE.MeshLambertMaterial();
+			// var geometry = new THREE.BoxGeometry( 10, 10, 10 );
+
+			var figure = new THREE.Group();
+			var left_torus = new THREE.Mesh(new THREE.TorusGeometry(20, 10, 30, 30, Math.PI), material);
+            left_torus.position.set(0, 20,0);
+
+			var right_torus = new THREE.Mesh(new THREE.TorusGeometry(20, 10, 30, 30, Math.PI), material);
+            right_torus.position.set(0, -20,0);
+            right_torus.rotation.set(0, 0, Math.PI);
+
+            var long_link = new THREE.Mesh(new THREE.CylinderGeometry(10 ,10, 40, 30), material);
+            long_link.position.set(20,0,0);
+
+            var short_link_1 = new THREE.Mesh(new THREE.CylinderGeometry(10 ,10, 16, 30), material);
+            short_link_1.position.set(-20,12,0);
+
+            var short_link_2 = new THREE.Mesh(new THREE.CylinderGeometry(10 ,10, 16, 30), material);
+            short_link_2.position.set(-20,-12,0);
+
+			scene.add( figure );		
+            figure.add(left_torus);
+            figure.add(right_torus);
+            figure.add(long_link);
+            figure.add(short_link_1);
+            figure.add(short_link_2);
+
+
+			function animate()
+			{
+				figure.rotation.set( t/3, t/4, t/5 );
+			}
+
+		</script>
+	</body>
+</html>

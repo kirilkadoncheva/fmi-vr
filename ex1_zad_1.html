@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+
+		<meta charset="utf-8">
+		
+		<script src="three.min.js"></script>
+		<script src="stats.min.js"></script>
+		<script src="WebGL.js"></script>
+		<script src="vax.js"></script>
+	</head>
+	
+	<body>
+		<script>
+			// инциализираме моно режим през нашата библиотека
+			vaxInit();
+
+			var material = new THREE.MeshLambertMaterial();
+			var geometry = new THREE.BoxGeometry( 10, 10, 10 );
+
+			var plates = new THREE.Group();
+			var plateA = new THREE.Mesh( new THREE.BoxGeometry( 2, 10, 2 ), material );
+			var plateB = new THREE.Mesh( new THREE.BoxGeometry( 8, 2, 2 ), material );
+			var plateC = new THREE.Mesh( new THREE.BoxGeometry( 8, 4, 2 ), material );
+			var plateD = new THREE.Mesh( new THREE.BoxGeometry( 4, 4, 2 ), material );
+			plateB.position.set(5,-4,0);
+			plateC.position.set(5,3,0);
+			plateD.position.set(7,-1,0);
+			scene.add( plates );			
+			plates.add(plateA);
+			plates.add(plateB);
+			plates.add(plateC);
+			plates.add(plateD);
+
+
+			function animate()
+			{
+				plates.rotation.set( t/3, t/4, t/5 );
+			}
+
+		</script>
+	</body>
+</html>
+

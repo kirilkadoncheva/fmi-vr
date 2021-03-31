@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+
+		<meta charset="utf-8">
+		
+		<script src="three.min.js"></script>
+		<script src="stats.min.js"></script>
+		<script src="WebGL.js"></script>
+		<script src="vax.js"></script>
+	</head>
+	
+	<body>
+		<script>
+			// инциализираме моно режим през нашата библиотека
+			vaxInit();
+
+			 var material = new THREE.MeshLambertMaterial();
+             var geometrySun = new THREE.SphereGeometry( 20, 24, 8 );
+			 var geometryRay = new THREE.ConeGeometry( 8, 30, 16 );
+
+             var sunTemplate = new THREE.Group();
+             sunTemplate.add(new THREE.Mesh(geometrySun, material));
+             sunTemplate.scale.set(0.5, 0.5, 0.05);
+
+             var ray = new THREE.Mesh(geometryRay, material);
+             ray.position.set(0,20,0);
+             var figure = new THREE.Group();
+             figure.add(sunTemplate);
+
+             var rayTemplate = new THREE.Group();
+             rayTemplate.add(ray);
+
+             for (var i=0; i<10; i++)
+			{
+				var alpha = 2*Math.PI*i/10;
+				
+				var ray = rayTemplate.clone();
+				ray.rotation.set( 0, 0, alpha );
+				sunTemplate.add( ray );
+			}
+
+            var suns = [];
+			for (var i=0; i<15; i++)
+			{
+				suns[i] = sunTemplate.clone();
+				suns[i].position.set(
+					THREE.Math.randFloatSpread( 100 ),
+					THREE.Math.randFloatSpread( 100 ),
+					THREE.Math.randFloatSpread( 100 ) );
+				scene.add( suns[i] );
+			}
+
+             //scene.add(sunTemplate);
+
+            function animate()
+			{
+				for (var i=0; i<15; i++)
+				{
+					suns[i].rotation.set( i+t/2, i-t/3, t );
+				}
+			}
+
+		</script>
+	</body>
+</html>

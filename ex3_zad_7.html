@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<script src="three.min.js"></script>
+		<script src="stats.min.js"></script>
+		<script src="WebGL.js"></script>
+		<script src="vax.js"></script>
+	</head>
+	
+	<body>
+		<script>
+			// инциализираме моно режим през нашата библиотека
+			vaxInit();
+            scene.background = new THREE.Color('black');
+
+            var ground = new THREE.Mesh(
+                new THREE.CylinderGeometry(160, 160, 1),
+                new THREE.MeshPhongMaterial(
+                    {color: 'indigo',
+                    shininess: 100
+                }
+                )
+            );
+
+            ground.position.set(0,-20,0);
+            scene.add(ground);
+
+            var cube = new THREE.Mesh(
+                new THREE.BoxGeometry(34, 34, 34),
+                new THREE.MeshPhongMaterial({
+                    color: 'white',
+                    shininess: 30
+                })
+            );
+            cube.position.y = 20;
+            scene.add(cube);
+
+            scene.remove(light);
+			
+			
+			camera.position.set( 100, 70, 0 );
+			camera.lookAt( scene.position );
+
+            var shiny_cube = new THREE.Group();
+            shiny_cube.position.y=20;
+            scene.add(shiny_cube);
+
+            var light = new THREE.PointLight('red', 2, 50);
+            light.position.set(20,20,20);
+            shiny_cube.add(light);
+
+            var light = new THREE.PointLight('red', 2, 50);
+            light.position.set(-20,-20,-20);
+            shiny_cube.add(light);
+
+            var light = new THREE.PointLight('yellow', 2, 50);
+            light.position.set(-20,-20,20);
+            shiny_cube.add(light);
+
+            var light = new THREE.PointLight('yellow', 2, 50);
+            light.position.set(20,20,-20);
+            shiny_cube.add(light);
+
+            var light = new THREE.PointLight('royalblue', 2, 50);
+            light.position.set(-20,20,-20);
+            shiny_cube.add(light);
+
+            var light = new THREE.PointLight('royalblue', 2, 50);
+            light.position.set(20,-20,20);
+            shiny_cube.add(light);
+            
+            var light = new THREE.PointLight('white', 2, 50);
+            light.position.set(20,-20,-20);
+            shiny_cube.add(light);
+
+            var light = new THREE.PointLight('white', 2, 50);
+            light.position.set(-20,20,20);
+            shiny_cube.add(light);
+
+            
+
+			function animate()
+			{
+                scene.rotation.y = t/2;
+                cube.rotation.set( t/4, t, t/3 );
+				shiny_cube.rotation.set( t/4, t, t/3 );
+
+			}
+
+		</script>
+	</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<script src="three.min.js"></script>
+		<script src="stats.min.js"></script>
+		<script src="WebGL.js"></script>
+		<script src="vax.js"></script>
+	</head>
+	
+	<body>
+		<script>
+			// инциализираме моно режим през нашата библиотека
+			vaxInit();
+
+			var red_material = new THREE.MeshLambertMaterial({color:'red'});
+            var white_material = new THREE.MeshLambertMaterial({color:'white'});
+            var geometry = new THREE.BoxGeometry(1,1,1);
+            
+            var flag = new THREE.Group();
+
+            var redBox = new THREE.Mesh(geometry, red_material);
+            redBox.scale.set(10, 6 ,1);
+
+            var redBox2 = redBox.clone();
+            redBox2.position.set(14,0,0);
+
+            var redBox3 =  new THREE.Mesh(geometry, red_material);
+            redBox3.position.set(7,-1.5,0);
+            redBox3.scale.set(4,3,1);
+
+            var redBox6 = redBox3.clone();
+            redBox6.position.set(7,11.5,0);
+
+            var redBox7 = new THREE.Mesh(geometry, red_material);
+            redBox7.position.set(-1.50,5,0);
+            redBox7.scale.set(7,4,1);
+
+            var redBox8 = redBox7.clone();
+            redBox8.position.set(15.5,5,0);
+            
+
+            var redBox4 = redBox.clone();
+            redBox4.position.set(0,10,0);
+
+            var redBox5 = redBox.clone();
+            redBox5.position.set(14,10,0);
+            
+            var whiteBox = new THREE.Mesh(geometry, white_material);
+            whiteBox.scale.set(4, 10 ,1);
+            whiteBox.position.set(7,5,0);
+
+            var whiteBox2 = whiteBox.clone();
+            whiteBox2.rotation.set(0,0, Math.PI/2);
+
+            flag.add(redBox, redBox2, redBox3, whiteBox, whiteBox2, redBox4, redBox5,redBox6, redBox7, redBox8 );
+            scene.add(flag);
+            function animate()
+			{
+				flag.rotation.set( Math.sin(t/4)/3, t, Math.cos(t/4)/3 );
+			}
+
+		</script>
+	</body>
+</html>

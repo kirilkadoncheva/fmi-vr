@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<script src="three.min.js"></script>
+		<script src="stats.min.js"></script>
+		<script src="WebGL.js"></script>
+		<script src="vax.js"></script>
+	</head>
+	
+	<body>
+		<script>
+			// инциализираме моно режим през нашата библиотека
+			vaxInit();
+            scene.background = new THREE.Color('black');
+
+            var sun_geometry = new THREE.IcosahedronGeometry(40, 1);
+
+            var sun = new THREE.Group();
+            scene.add(sun);
+
+            var n = 30;
+            var suns = [];
+            for (var i = 0; i<n;i++) {
+                suns[i] = new THREE.Mesh(
+					sun_geometry,
+					new THREE.MeshLambertMaterial({
+						color: new THREE.Color().setHSL( THREE.Math.randFloat(0.04,0.12), 1.5, 0.5 ),
+						emissive: 'orange',
+						emissiveIntensity: 0.5,
+						transparent: true,
+						opacity: 1-i/(n+2) // променлива прозрачност
+					})
+				);
+
+                var s = 1+i/n/25;
+				suns[i].scale.set( s, s, s );
+				
+				sun.add( suns[i] )
+            }
+            
+			
+            //sun.add(sun1);
+			function animate()
+			{
+				// движим отделните елементи на слънцето
+                for (var i=0; i<n; i++)
+				{
+					suns[i].rotation.set( Math.cos(t/3+i)/2, Math.sin(t/4-i)/4, Math.sin(t/5+i*2)/2 );
+				}
+				
+				// въртим цялото слънце
+				sun.rotation.set( 0, t/5, 0 );
+			}
+
+		</script>
+	</body>
+</html>

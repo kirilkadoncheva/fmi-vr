@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<script src="three.min.js"></script>
+		<script src="stats.min.js"></script>
+		<script src="WebGL.js"></script>
+		<script src="vax.js"></script>
+	</head>
+	
+	<body>
+		<script>
+			// инциализираме моно режим през нашата библиотека
+			vaxInit();
+
+            var n = 3;
+            var wall_geometry = new THREE.BoxGeometry(2*n,2*n+2,2*n);
+            var vertex_geometry = new THREE.SphereGeometry(1, 60, 30);
+            var edge_geometry = new THREE.CylinderGeometry(1, 1, 2*n, 30);
+        
+
+            var figure = new THREE.Group();
+            scene.add(figure);
+
+            var s = 0.9*(30-10/n)/n; // експериментално установено
+			figure.scale.set( s, s, s );
+			
+
+            var matte_material = new THREE.MeshBasicMaterial( {color:'black'} );
+			var shiny_material = new THREE.MeshPhongMaterial( {color:'sandybrown', shininess:150} );
+
+            for (var x=-n; x<2*n; x+=2*n)
+            for (var y=-n; y<2*n; y+=2*n)
+            for (var z=-n; z<2*n; z+=2*n) {
+                var new_vertex = new THREE.Mesh(vertex_geometry, matte_material);
+                new_vertex.position.set(x, y, z);
+                figure.add(new_vertex);
+
+            }
+
+            for(var x = -n; x<2*n; x+=2*n)
+            for(var z = -n; z<2*n; z+=2*n) {
+
+                var edge = new THREE.Mesh(edge_geometry, matte_material);
+                edge.position.set(x, 0, z);
+                figure.add(edge);
+
+                var edge1 = edge.clone();
+                edge1.position.set(x, z, 0);
+                edge1.rotation.set(Math.PI/2,0,0);
+                figure.add(edge1);
+
+                var edge2 = edge.clone();
+                edge2.position.set(0, x, z);
+                edge2.rotation.set(0,0,Math.PI/2);
+                figure.add(edge2);
+            }
+
+            var wall = new THREE.Mesh( wall_geometry, shiny_material );
+			figure.add( wall );
+
+            var wall = wall.clone();
+            wall.rotation.set(0,0,Math.PI/2);
+            figure.add(wall);
+
+            var wall = wall.clone();
+            wall.rotation.set(Math.PI/2,0,0);
+            figure.add(wall);
+			
+			function animate()
+			{
+				figure.rotation.set( t/3, t, t/2 );
+			}
+
+		</script>
+	</body>
+</html>

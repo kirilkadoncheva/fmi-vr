@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<script src="three.min.js"></script>
+		<script src="stats.min.js"></script>
+		<script src="WebGL.js"></script>
+		<script src="vax.js"></script>
+	</head>
+	
+	<body>
+		<script>
+			// инциализираме моно режим през нашата библиотека
+			vaxInit();
+            
+            var cube_geometry = new THREE.BoxGeometry(60, 60, 60);
+            var lines_geometry = new THREE.EdgesGeometry( cube_geometry  );
+
+            var cube_walls = new THREE.Mesh(
+                cube_geometry,
+                new THREE.MeshNormalMaterial({
+                    color: 0x00bfff,
+                    transparent: true,
+                    opacity: 0.3
+                })
+            );
+            var lines = new THREE.LineSegments( lines_geometry, new THREE.LineBasicMaterial( { color: 0x000000 } ) );
+            var cube = new THREE.Group();
+            cube.add(cube_walls, lines);
+
+
+            var ball = new THREE.Mesh(
+                new THREE.SphereGeometry(6, 30, 30),
+                new THREE.MeshBasicMaterial({
+                    color: 0xffd500
+                })
+            );
+
+            cube.add(ball);
+            ball.position.set(30,30,30);
+            scene.add(cube);
+
+            var positions = [];
+
+            for(var x = -30; x<60; x+=60)
+            for(var y = -30; y<60; y+=60)
+            for(var z = -30; z<60; z+=60) {
+                var pos = new THREE.Vector3(x,y,z);
+
+                positions.push(pos);
+            }
+			
+            var n = 30;
+            var v = new THREE.Vector3();
+            var frame = 0;
+            var current = 0;
+            var previous = 0;
+
+            function getRandomInt(min, max) {
+                min = Math.ceil(min);
+                max = Math.floor(max);
+                return Math.floor(Math.random() * (max - min + 1) + min); 
+            }
+
+           function neighbours(i,j) {
+
+              var vector = new THREE.Vector3().subVectors(positions[i], positions[j]);
+              var sum = vector.x + vector.y+vector.z;
+              if(vector.x==0&&vector.y==0&&vector.z!=0
+              || vector.x!=0&&vector.y==0&&vector.z==0
+              || vector.x==0&&vector.y!=0&&vector.z==0) return true;
+
+              return false;
+           }
+			function animate()
+			{
+                if(frame%n == 0) {
+                    
+                    var i = getRandomInt(0,7);
+
+                    while(i==previous||neighbours(current, i)==false) {
+                        i = getRandomInt(0,7);
+                    }
+
+                    var destination = positions[i];
+                    var here = positions[current];
+                    ball.position.copy(here);
+                    v.subVectors(destination, here).divideScalar(n);
+                    previous = current;
+                    current = i;
+                } else {
+                    ball.position.add(v);
+                }
+
+                frame++;
+                cube.rotation.set(t/2, t/2, t/3);
+			}
+
+		</script>
+	</body>
+</html>

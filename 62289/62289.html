@@ -1,0 +1,136 @@
+﻿<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Тест №2: Имплементация</title>
+		<meta charset="utf-8">
+		
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		
+		<script src="libs/three.min.js"></script>
+		<script src="libs/dat.gui.min.js"></script>
+		<script src="libs/WebGL.js"></script>
+		<script src="libs/OrbitControls.js"></script>
+		<script src="libs/vax.js"></script>
+		<script src="libs/scene.js"></script>
+	</head>
+	
+	<body>
+		<script>
+			sceneInit();
+			sceneObjects();
+			
+			// орбитална навигация
+			var control = new THREE.OrbitControls( camera, renderer.domElement );
+			
+			// интерактивно контролиране на ъглите
+			var gui = new dat.GUI();
+			gui.domElement.style.marginRight = 0;
+			var pose = {
+				randomize: randomize,
+				solve: solve,
+				alpha: 60,
+				beta: 110,
+			};
+			gui.add( pose, 'randomize' ).name('Наново');
+			gui_alpha = gui.add( pose, 'alpha', 1, 179 ).name('&alpha;').step(0.1);
+			gui_beta = gui.add( pose, 'beta', 1, 359 ).name('&beta;').step(0.1);
+			gui.add( pose, 'solve' ).name('Реши!');
+			gui.open();
+			
+			
+			// първи елемент на робот
+			var a = robotElement( 1, 40, 5 );
+			scene.add( a );
+
+			// втори елемент
+			var b = robotElement( 0.75, 37.5, 2, a );
+			var end = new THREE.Mesh(
+						new THREE.TorusBufferGeometry(3,1,10,50),
+						robotMaterial
+					);
+			end.position.y = 40;
+			end.castShadow = true;
+			b.add( end );
+			
+			function randomize()
+			{
+				p.position.x = THREE.Math.randFloat( -80, 80 );
+				p.position.y = THREE.Math.randFloat( 20, 70 );
+			}
+			
+			function animate()
+			{
+				a.rotation.z = THREE.Math.degToRad( pose.alpha-90 );
+				b.rotation.z = THREE.Math.degToRad( 180-pose.beta );
+				
+				control.update();
+			}
+			
+			randomize();
+
+
+
+// НЕ ПРОМЕНЯЙТЕ КОДА НАД ТОЗИ КОМЕНТАР
+// ТАКА ВСИЧКИ РЕШЕНИЯ ЩЕ СА СЪИЗМЕРИМИ
+// ПРОМЕНЯЙТЕ САМО ВЪВ ФУНКЦИЯТА SOLVE!
+
+			function solve()
+			{
+				// alert('Във функцията solve() сложете своето решение от листа.');
+				// alert('Ако не работи, го направете да работи, доразвивайки идеята си от листа.');
+				
+				// двата елемента на робота са дълги 40 единици
+				// основата на робота е в (0,0,0)
+				// точката за достигане е p с координати p.position
+				// ъглите на елементите на робота са pos.alpha и pose.beta
+
+				//може направо така, защото основата е в (0,0,0)
+				l = new THREE.Vector3(p.position.x, p.position.y, p.position.z).length();
+				
+				if(l > 80) {
+					alert("Точка P е извън обсега на робота!");
+					gui.updateDisplay();
+					return;
+				} 
+
+				
+				var p_y = Math.abs(p.position.y);
+				var p_x = p.position.x;
+				var a_y = 0;
+
+				var alpha_radians = Math.asin(p_y/l);
+				var beta_radians = 2*Math.asin(l/80);
+
+				var beta = beta_radians*(180/Math.PI);
+				var alpha = alpha_radians*(180/Math.PI) + 90 - beta/2;
+
+				if(l == 80) {
+					pose.beta = 0;
+					pose.alpha = 180 - alpha;
+
+					if(p_x > 0) {
+						pose.alpha = alpha;
+					}
+
+					gui.updateDisplay();
+					return;
+				}
+
+				pose.beta = beta;
+				pose.alpha = 180 - alpha;
+
+				if(p_x > 0) {
+					pose.beta = - beta;
+					pose.alpha = alpha;
+				}
+
+				gui.updateDisplay();
+
+			}
+			
+		</script>
+	</body>
+</html>
+
+
