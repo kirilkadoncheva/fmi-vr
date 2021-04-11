@@ -107,3 +107,42 @@ function pillar(center, material)
 	
 	return pillar;
 }
+
+// елемент на робот
+var robotMaterial = new THREE.MeshPhongMaterial( {color: 'tomato', shininess: 100} );
+	
+// клас за елемент на робот
+function robotElement( sizeX, sizeY, sizeZ, parent )
+{
+	var robotGeometry = new THREE.BoxBufferGeometry( sizeX, sizeY, sizeZ );
+	robotGeometry.translate( 0, sizeY/2, 0 );
+	
+	var object = new THREE.Mesh( robotGeometry, robotMaterial );
+	object.castShadow = true;
+		
+	// ако има родител, регистрира елемента като негов подобект
+	if( parent )
+	{
+		object.position.set( 0, parent.geometry.parameters.height, 0 );
+		parent.add( object );
+	}
+	
+	return object;
+}
+	
+// клас за елемент на робот
+function robotElementShape( geometry, length, parent )
+{
+	var object = new THREE.Mesh( geometry, robotMaterial );
+	object.length = length;
+	object.castShadow = true;
+		
+	// ако има родител, регистрира елемента като негов подобект
+	if( parent )
+	{
+		object.position.set( 0, parent.length, 0 );
+		parent.add( object );
+	}
+	
+	return object;
+}

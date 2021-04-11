@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		
+		<script src="three.min.js"></script>
+		<script src="stats.min.js"></script>
+		<script src="WebGL.js"></script>
+		<script src="vax.js"></script>
+		<script src="scene.js"></script>
+	</head>
+	
+	<body>
+		<script>
+            sceneInit();
+            sceneObjects();
+            scene.remove(object);
+
+            var parts = [];
+            var n = 40;
+
+            var size = 3;
+            var geometry = new THREE.TorusBufferGeometry(4*size, size, 16,30);
+            geometry.translate(0, 4*size, 0);
+            parts.push(robotElementShape(geometry, 9*size));
+            parts[0].rotation.z = -Math.PI/2;
+            parts[0].position.set(-30, 13, 50);
+            scene.add(parts[0]);
+
+            for(var i = 1; i< n; i++) {
+                size*=0.95;
+
+                var geometry = new THREE.TorusBufferGeometry(4*size, size, 16,30);
+                geometry.translate(0, 4*size, 0);
+
+                var part = robotElementShape(geometry, 9*size, parts[i-1]);
+                parts.push(part);
+            }
+			function animate()
+			{
+                var angle = 0.27 + 0.27*Math.sin(t);
+
+                for(var i = 1; i< n; i++) {
+                    parts[i].rotation.z = angle;
+                }
+                scene.rotation.y = t/2;
+			}
+		</script>
+	</body>
+</html>
+
+

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		
+		<script src="three.min.js"></script>
+		<script src="stats.min.js"></script>
+		<script src="WebGL.js"></script>
+		<script src="vax.js"></script>
+		<script src="scene.js"></script>
+	</head>
+	
+	<body>
+		<script>
+            sceneInit();
+            sceneObjects();
+            scene.remove(object);
+
+            var seat = robotElement(60,5,60);
+            seat.position.y = 60;
+            scene.add(seat);
+
+            var left_leg_1 = robotElement(5, 30, 5, seat);
+            var left_leg_2 = robotElement(5, 30, 5, left_leg_1);
+            left_leg_1.position.set(-25,0,0);
+            left_leg_1.rotation.set(Math.PI,0,0);
+
+            var right_leg_1 = robotElement(5, 30, 5, seat);
+            var right_leg_2 = robotElement(5, 30, 5, right_leg_1);
+            right_leg_1.position.set(25,0,0);
+            right_leg_1.rotation.set(Math.PI,0,0);
+			function animate()
+			{
+                var angle = 0.5+0.5*Math.sin( t );
+
+                seat.position.y = 30 + 60*Math.abs(Math.cos(3*t));
+
+                var angle = 0, vibe = 0;
+
+                var height = seat.position.y;
+                //we have to bend legs
+                if(height < 60) {
+                    angle = Math.acos(height/60);
+                }
+                else {
+                    vibe = (seat.position.y-60)/150;
+					vibe *= vibe;
+                }
+
+                left_leg_1.rotation.z = angle + vibe*Math.sin(60*t);
+                left_leg_2.rotation.z = -2*angle;
+
+                right_leg_1.rotation.z = -angle - vibe*Math.sin(60*t);
+                right_leg_2.rotation.z = 2*angle;
+			}
+		</script>
+	</body>
+</html>
+
+

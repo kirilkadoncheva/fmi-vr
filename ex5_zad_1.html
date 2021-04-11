@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		
+		<script src="three.min.js"></script>
+		<script src="stats.min.js"></script>
+		<script src="WebGL.js"></script>
+		<script src="vax.js"></script>
+	</head>
+	
+	<body>
+		<script>
+			vaxInit();
+
+			var planet = new THREE.Mesh(
+                new THREE.IcosahedronBufferGeometry(40,6),
+                new THREE.MeshLambertMaterial({color:'brown'})
+            );
+
+            scene.add(planet);
+            
+            var tree_stem = new THREE.Mesh(
+                new THREE.CylinderBufferGeometry(0.1, 1.5, 5),
+                new THREE.MeshLambertMaterial({color:'brown'})
+            );
+            tree_stem.position.y = 42.5;
+
+            var tree_crown = new THREE.Mesh(
+                new THREE.IcosahedronBufferGeometry(4,0),
+                new THREE.MeshLambertMaterial({color:'green'})
+            );
+            tree_crown.position.y = 47;
+
+            var sample_tree = new THREE.Group();
+            sample_tree.add(tree_stem, tree_crown);
+
+            for(var i = 0; i< 100; i++) {
+                var tree = sample_tree.clone();
+                tree.rotation.set(2*Math.PI*Math.random(), 2*Math.PI*Math.random(), 2*Math.PI*Math.random());
+                planet.add(tree);
+            }
+			
+			function animate()
+			{
+				planet.rotation.set(0, t/2, 0);
+			}
+		</script>
+	</body>
+</html>
+
+

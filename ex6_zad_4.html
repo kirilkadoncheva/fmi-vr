@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		
+		<script src="three.min.js"></script>
+		<script src="stats.min.js"></script>
+		<script src="physi.js"></script>
+		<script src="WebGL.js"></script>
+		<script src="vax.js"></script>
+        <script src="scene.js"></script>
+	</head>
+	
+	<body>
+		<script>
+			sceneInit();
+
+            camera.position.set(0,20,350);
+			camera.lookAt(new THREE.Vector3(0,0,0));
+
+            var geometry = new THREE.BoxBufferGeometry(200, 1, 200);
+            var material = Physijs.createMaterial(new THREE.MeshNormalMaterial({transparent: true, opacity: 0.3}), 1, 0);
+
+            var base = new Physijs.BoxMesh(geometry, material, 0);
+            base.position.set(0, -100, 0);
+            scene.add(base);
+
+            var base = new Physijs.BoxMesh(geometry, material, 0);
+            base.position.set(0, 100, 0);
+            scene.add(base);
+
+            var side = new Physijs.BoxMesh(geometry, material, 0);
+            side.position.set(-100, 0, 0);
+            side.rotation.z = Math.PI/2;
+            scene.add(side);
+
+            var side = new Physijs.BoxMesh(geometry, material, 0);
+            side.position.set(100, 0, 0);
+            side.rotation.z = Math.PI/2;
+            scene.add(side);
+
+            var side = new Physijs.BoxMesh(geometry, material, 0);
+            side.position.set(0, 0, -100);
+            side.rotation.x = Math.PI/2;
+            scene.add(side);
+
+            var side = new Physijs.BoxMesh(geometry, material, 0);
+            side.position.set(0, 0, 100);
+            side.rotation.x = Math.PI/2;
+            scene.add(side);
+
+            var geometry = new THREE.BoxBufferGeometry( 30, 30, 30 );
+			var material = Physijs.createMaterial( new THREE.MeshNormalMaterial(), 1, 0 );
+
+            var cubes = [];
+
+            for(var i = 0; i< 10; i++) {
+                var cube = new Physijs.BoxMesh(geometry, material);
+                cube.position.set(THREE.Math.randFloat(-60,60), THREE.Math.randFloat(-60,60), THREE.Math.randFloat(-60,60));
+                cube.receiveShadow = true;
+				cube.castShadow = true;
+				cubes.push( cube );
+				scene.add( cube );
+            }
+
+            //execute random_gravity every 15s
+            setInterval(random_gravity, 1500);
+
+            var gravity = new THREE.Mesh(
+				new THREE.IcosahedronBufferGeometry( 10, 2 ),
+				new THREE.MeshBasicMaterial({color:'black'}),
+			);
+			scene.add( gravity );
+
+            var f = new THREE.Vector3(0,0,1);
+
+            function random_gravity() {
+                var g = new THREE.Vector3(
+					Math.sign(THREE.Math.randFloat(-10,10)),
+					Math.sign(THREE.Math.randFloat(-10,10)),
+					Math.sign(THREE.Math.randFloat(-10,10)) );
+
+                g.setLength(10);
+                gravity.position.copy( g );
+                gravity.position.multiplyScalar(17);
+                scene.setGravity(g);
+
+                for( var i=0; i<10; i++ )
+					cubes[i].applyCentralForce( f );
+            }
+			function animate()
+			{
+               
+                scene.simulate( 1/10 );
+				
+				scene.rotation.y = t/10;
+			}
+		</script>
+	</body>
+</html>
