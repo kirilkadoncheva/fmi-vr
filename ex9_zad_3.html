@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		
+	</head>
+	
+	<body>
+
+        <script>
+		
+
+            function getLocation()
+            {
+                var result = document.getElementById( 'result' );
+
+                if (navigator.geolocation)
+                {
+                    navigator.geolocation.getCurrentPosition( geoSuccess );
+                }
+                else
+                { 
+                    result.innerHTML = "Браузърът не поддържа геолокация.";
+                }
+            }
+
+            function geoSuccess( position )
+            {
+					
+				//window.open( 'https://www.openstreetmap.org/#map=12/' + position.coords.latitude + '/' + position.coords.longitude );
+                window.open('https://www.openstreetmap.org/?mlat=' +position.coords.latitude + '&mlon=' + position.coords.longitude +'#map=12/' + position.coords.latitude + '/' + position.coords.longitude);
+
+            }
+            
+            </script>
+
+            <button onclick="getLocation()">Мои координати</button>
+
+
+	</body>
+</html>
+
+

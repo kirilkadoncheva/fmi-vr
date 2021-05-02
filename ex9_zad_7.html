@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<script src="libs/three.min.js"></script>
+		<script src="libs/stats.min.js"></script>
+		<script src="libs/WebGL.js"></script>
+		<script src="libs/vax.js"></script>
+        <script src="libs/scene.js"></script>
+	</head>
+	
+	<body>
+
+        <script>
+            vaxInit();
+			
+
+			light.position.set( 100, 200, -50 );
+			
+			camera.position.set( 0, 400, 0 );
+			camera.lookAt( new THREE.Vector3( 0, 0, 0 ) );
+
+            var container_geometry = new THREE.BoxGeometry(300, 200, 1 , 16, 10, 16);
+            var container_material = new THREE.MeshLambertMaterial({color: 'yellow'});
+
+            var container = new THREE.Mesh(container_geometry, container_material);
+            container.rotation.set(Math.PI/2, 0, 0);
+            scene.add(container);
+            var geometry = new THREE.SphereGeometry(20, 32, 16);
+            var material = new THREE.MeshLambertMaterial({color: 'red'});
+
+            var ball = new THREE.Mesh(geometry, material);
+
+            scene.add(ball);
+
+            window.addEventListener( "deviceorientation", deviceOrientation, true);
+
+            function deviceOrientation(event) {
+                var x = event.beta; 
+                var y = event.gamma;
+
+                if (x >  90) { x =  90};
+                if (x < -90) { x = -90};
+
+
+                x += 90;
+                y += 90;
+
+                ball.position.y = (100*y/180 - 10);
+                ball.position.x = (150*x/180 - 10);
+
+            }
+
+            function animate() {
+                //scene.rotation.y = t;
+            }
+            
+            </script>
+
+
+	</body>
+</html>
+
+
