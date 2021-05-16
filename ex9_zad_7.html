@@ -17,10 +17,11 @@
         <script>
             vaxInit();
 			
+			scene.background = new THREE.Color( 'white' );
 
 			light.position.set( 100, 200, -50 );
 			
-			camera.position.set( 0, 400, 0 );
+			camera.position.set( 0, 120, 0 );
 			camera.lookAt( new THREE.Vector3( 0, 0, 0 ) );
 
             var container_geometry = new THREE.BoxGeometry(300, 200, 1 , 16, 10, 16);
@@ -36,26 +37,21 @@
 
             scene.add(ball);
 
+            var changeX = 0;
+            var changeY = 0;
+
             window.addEventListener( "deviceorientation", deviceOrientation, true);
 
             function deviceOrientation(event) {
-                var x = event.beta; 
-                var y = event.gamma;
-
-                if (x >  90) { x =  90};
-                if (x < -90) { x = -90};
-
-
-                x += 90;
-                y += 90;
-
-                ball.position.y = (100*y/180 - 10);
-                ball.position.x = (150*x/180 - 10);
+                changeX = event.beta;
+                changeY = event.gamma;
 
             }
 
             function animate() {
-                //scene.rotation.y = t;
+                var dt = t;
+                ball.position.x = THREE.Math.clamp( ball.position.x+3*changeY * dT, -20, 20 );
+				ball.position.z = THREE.Math.clamp( ball.position.z+3*changeX * dT, -45, 45 );
             }
             
             </script>

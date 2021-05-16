@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Test 4</title>
+		<meta charset="utf-8">
+		
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		
+		<script src="three.min.js"></script>
+		<script src="WebGL.js"></script>
+		<script src="vax.js"></script>
+	</head>
+	
+	<body>
+
+		<script>
+            //телефона трябва да се държи в landscape mode
+            vaxInit({antialias:true, alpha:true});
+
+            camera = new THREE.PerspectiveCamera(25, window.innerWidth/window.innerHeight, 400, 3000);
+            
+            
+            var textureCube = new THREE.CubeTextureLoader().setPath('texture/').load(['posx.jpg', 'negx.jpg', 'posy.jpg', 'negy.jpg', 'posz.jpg', 'negz.jpg']);
+			textureCube.mapping = THREE.CubeRefractionMapping;
+            scene.background = textureCube;
+
+            const ambient = new THREE.AmbientLight( 0xffffff );
+			scene.add( ambient );
+
+			window.addEventListener('deviceorientation', changeCameraPosition)
+			
+			function changeCameraPosition(event) {
+                camera.rotation.set( 
+                    THREE.Math.degToRad(event.beta), 
+                    THREE.Math.degToRad(event.alpha),
+                    THREE.Math.degToRad(-event.gamma), 
+                    'YXZ');
+
+                    
+                camera.rotateX(-Math.PI / 2);
+                camera.rotateZ(-Math.PI / 2);
+            }
+
+            var geometry = new THREE.DodecahedronGeometry(70);
+            var material = new THREE.MeshPhongMaterial( { color: 0xccddff, envMap: textureCube, refractionRatio: 0.985 } );
+            
+            var n = 70;
+			var objects = [];
+			for( var i=0; i<n; i++)
+			{
+				
+				var crystal = new THREE.Mesh( geometry, material );
+
+				var r = THREE.Math.randFloat(1000,3000),
+					a = THREE.Math.randFloat(0,2*Math.PI),
+					b = THREE.Math.randFloat(Math.PI/4,Math.PI/1.8);
+				crystal.position.setFromSphericalCoords( r, b, a );
+				
+				objects.push(crystal);
+				scene.add(crystal);
+			}
+
+            function animate() {
+                objects.forEach(object => object.rotation.set(t/2, t/4, t/3));
+            }
+
+		</script>
+	</body>
+</html>
+
+
