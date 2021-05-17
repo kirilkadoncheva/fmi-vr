@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Hw 3</title>
+		<meta charset="utf-8">
+		
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		
+		<script src="three.min.js"></script>
+		<script src="WebGL.js"></script>
+		<script src="vax.js"></script>
+        <script src="stats.min.js"></script>
+	</head>
+	
+	<body>
+
+		<script>
+            //телефонът трябва да се държи в landscape завъртян надясно
+            vaxInitParallax();
+
+            var cubeGeometry = new THREE.BoxGeometry(40, 40, 40);
+            var cubeMaterial = new THREE.MeshPhongMaterial( {color: 'blue', side: THREE.BackSide} );
+            var cube = new THREE.Mesh( cubeGeometry, cubeMaterial );
+
+            scene.add(cube)
+
+            var coneGeometry = new THREE.ConeGeometry(1, 4, 60);
+
+            camera.position.set(cube.position.x, cube.position.y, cube.position.z);
+            light.position.set(cube.position.x, cube.position.y, cube.position.z);
+
+            populateCubeWithCones();
+
+			window.addEventListener('deviceorientation', changeCameraRotation);
+			
+			function changeCameraRotation(event) {
+
+				var alpha = THREE.Math.degToRad( event.alpha );
+				var beta = THREE.Math.degToRad( event.beta );
+				var gamma = THREE.Math.degToRad( event.gamma );
+				
+				camera.rotation.set( beta, alpha, -gamma, 'YXZ' );
+                camera.rotateX(-Math.PI/2);
+            	camera.rotateZ(Math.PI/2);
+            }
+
+            function makeCone(x,y,z) {
+                var color = new THREE.Color( 0xffffff );
+                color.setHex( Math.random() * 0xffffff );
+
+                var coneMaterial = new THREE.MeshPhongMaterial({"color": color});
+
+                var cone = new THREE.Mesh(coneGeometry, coneMaterial);
+                cone.position.set(x,y,z);
+
+                return cone;
+
+            }
+
+            function populateCubeWithCones() {
+                for(var y = -18; y <= 18; y+=36) {
+                    for(var x = -20; x <= 20; x+=5)
+                         for(var z = -20; z <= 20; z+=5) {
+                             cube.add(makeCone(x,y,z));
+                         }
+                }
+
+                for(var z = -20; z <= 20; z+=40) {
+                    for(var y = -18; y <= 15; y+=5)
+                         for(var x = -20; x <= 20; x+=5) {
+                            cube.add(makeCone(x,y,z));
+                         }
+                }
+
+                for(var x = -20; x <= 20; x+=40) {
+                    for(var y = -18; y <= 15; y+=5)
+                         for(var z = -20; z <= 20; z+=5) {
+                            cube.add(makeCone(x,y,z));
+                         }
+                }
+            }
+
+            function getRandomNumsInInterval(a, b, n) {
+                var numbers = [];
+
+                for(var i = 0; i < n; i++) {
+                    var num = THREE.Math.randFloat(a,b);
+                    numbers.push(num);
+                }
+
+                return numbers;
+            }
+
+
+		</script>
+	</body>
+</html>
+
+
